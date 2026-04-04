@@ -1,4 +1,28 @@
 {
-  "slots": [],
+  "slots": [
+    {
+      "id": "3os67Kd7BCqaNGxXUmzLU",
+      "pokedexId": 4,
+      "level": 1,
+      "stats": {
+        "hp": 39,
+        "atk": 52,
+        "def": 43,
+        "spatk": 60,
+        "spdef": 50,
+        "spd": 65
+      },
+      "hunger": 80,
+      "happiness": 60,
+      "stage": "base",
+      "evolutionTimer": null,
+      "megaFormId": null,
+      "createdAt": 1775329596419,
+      "lastFed": 1775329651644,
+      "lastTrained": null,
+      "feedCooldown": 1775329659644,
+      "trainCooldown": null
+    }
+  ],
   "activeSlot": 0
 }
