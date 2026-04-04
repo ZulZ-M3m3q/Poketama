@@ -6,6 +6,11 @@
  * OpenAPI spec version: 0.1.0
  */
 
-export interface HealthStatus {
-  status: string;
+export interface BaseStats {
+  hp: number;
+  atk: number;
+  def: number;
+  spatk: number;
+  spdef: number;
+  spd: number;
 }

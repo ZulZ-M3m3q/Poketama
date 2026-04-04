@@ -3,13 +3,17 @@ info:
   # Do not change the title, if the title changes, the import paths will be broken
   title: Api
   version: 0.1.0
-  description: API specification
+  description: Monster Bracelet API
 servers:
   - url: /api
     description: Base API path
 tags:
   - name: health
     description: Health operations
+  - name: pokemon
+    description: Pokemon database operations
+  - name: save
+    description: Save data operations
 paths:
   /healthz:
     get:
@@ -24,6 +28,102 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+
+  /pokemon:
+    get:
+      operationId: listPokemon
+      tags: [pokemon]
+      summary: List all pokemon
+      responses:
+        "200":
+          description: List of all pokemon
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Pokemon"
+
+  /pokemon/{id}:
+    get:
+      operationId: getPokemon
+      tags: [pokemon]
+      summary: Get a single pokemon by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Pokemon found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Pokemon"
+        "404":
+          description: Pokemon not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /save:
+    get:
+      operationId: getSaveData
+      tags: [save]
+      summary: Get all save slots
+      responses:
+        "200":
+          description: Save data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SaveData"
+    post:
+      operationId: updateSaveData
+      tags: [save]
+      summary: Update save data
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SaveData"
+      responses:
+        "200":
+          description: Save data updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SaveData"
+
+  /nfc/parse:
+    post:
+      operationId: parseNfc
+      tags: [save]
+      summary: Parse NFC code into monster stats
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NfcParseRequest"
+      responses:
+        "200":
+          description: Parsed NFC data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NfcParseResponse"
+        "400":
+          description: Invalid NFC format
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
 components:
   schemas:
     HealthStatus:
@@ -34,3 +134,184 @@ components:
       required:
         - status
 
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+      required:
+        - error
+
+    Pokemon:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        sprite_url:
+          type: string
+        evolution_chain:
+          type: array
+          items:
+            type: integer
+        evolution_stage:
+          type: string
+          enum: [base, mid, final]
+        possible_evolutions:
+          type: array
+          items:
+            type: integer
+        hasMega:
+          type: boolean
+        megaForms:
+          type: array
+          items:
+            $ref: "#/components/schemas/MegaForm"
+        types:
+          type: array
+          items:
+            type: string
+        base_stats:
+          $ref: "#/components/schemas/BaseStats"
+      required:
+        - id
+        - name
+        - sprite_url
+        - evolution_chain
+        - evolution_stage
+        - possible_evolutions
+        - hasMega
+        - megaForms
+        - types
+        - base_stats
+
+    MegaForm:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        sprite_url:
+          type: string
+      required:
+        - id
+        - name
+        - sprite_url
+
+    BaseStats:
+      type: object
+      properties:
+        hp:
+          type: integer
+        atk:
+          type: integer
+        def:
+          type: integer
+        spatk:
+          type: integer
+        spdef:
+          type: integer
+        spd:
+          type: integer
+      required:
+        - hp
+        - atk
+        - def
+        - spatk
+        - spdef
+        - spd
+
+    MonsterInstance:
+      type: object
+      properties:
+        id:
+          type: string
+        pokedexId:
+          type: integer
+        nickname:
+          type: string
+        level:
+          type: integer
+        stats:
+          $ref: "#/components/schemas/BaseStats"
+        hunger:
+          type: integer
+        happiness:
+          type: integer
+        stage:
+          type: string
+          enum: [base, mid, final, mega]
+        evolutionTimer:
+          type: number
+          nullable: true
+        megaFormId:
+          type: string
+          nullable: true
+        createdAt:
+          type: number
+        lastFed:
+          type: number
+          nullable: true
+        lastTrained:
+          type: number
+          nullable: true
+        feedCooldown:
+          type: number
+          nullable: true
+        trainCooldown:
+          type: number
+          nullable: true
+      required:
+        - id
+        - pokedexId
+        - level
+        - stats
+        - hunger
+        - happiness
+        - stage
+        - evolutionTimer
+        - megaFormId
+        - createdAt
+        - lastFed
+        - lastTrained
+        - feedCooldown
+        - trainCooldown
+
+    SaveData:
+      type: object
+      properties:
+        slots:
+          type: array
+          items:
+            $ref: "#/components/schemas/MonsterInstance"
+          maxItems: 6
+        activeSlot:
+          type: integer
+      required:
+        - slots
+        - activeSlot
+
+    NfcParseRequest:
+      type: object
+      properties:
+        code:
+          type: string
+          description: "NFC code format: HP/ATK/DEF/SPATK/SPDEF/SPD/POKEDEX"
+      required:
+        - code
+
+    NfcParseResponse:
+      type: object
+      properties:
+        stats:
+          $ref: "#/components/schemas/BaseStats"
+        pokedexId:
+          type: integer
+        pokemon:
+          $ref: "#/components/schemas/Pokemon"
+      required:
+        - stats
+        - pokedexId
+        - pokemon

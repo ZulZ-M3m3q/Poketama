@@ -6,6 +6,7 @@
  * OpenAPI spec version: 0.1.0
  */
 
-export interface HealthStatus {
-  status: string;
+export interface NfcParseRequest {
+  /** NFC code format: HP/ATK/DEF/SPATK/SPDEF/SPD/POKEDEX */
+  code: string;
 }
