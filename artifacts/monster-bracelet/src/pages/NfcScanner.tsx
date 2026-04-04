@@ -72,7 +72,7 @@ export default function NfcScanner() {
       setParsed(null);
       setSuccess(false);
       parseNfc.mutate(
-        { code: trimmed },
+        { data: { code: trimmed } },
         {
           onSuccess: (data) => setParsed(data as NfcParseResponse),
           onError: (err: unknown) => {
@@ -165,8 +165,10 @@ export default function NfcScanner() {
 
     updateSave.mutate(
       {
-        slots: [...slots, newMonster],
-        activeSlot: saveData.activeSlot ?? 0,
+        data: {
+          slots: [...slots, newMonster],
+          activeSlot: saveData.activeSlot ?? 0,
+        },
       },
       {
         onSuccess: () => {

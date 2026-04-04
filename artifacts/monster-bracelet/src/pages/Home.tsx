@@ -209,7 +209,7 @@ export default function Home() {
       const newSlots = [...(saveData.slots ?? [])];
       newSlots[activeSlot] = updated;
       const newSave: SaveData = { ...saveData, slots: newSlots };
-      updateSave.mutate(newSave, {
+      updateSave.mutate({ data: newSave }, {
         onSuccess: () => {
           queryClient.invalidateQueries({ queryKey: getGetSaveDataQueryKey() });
         },

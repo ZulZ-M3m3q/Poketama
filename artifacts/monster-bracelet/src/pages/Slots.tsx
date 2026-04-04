@@ -47,7 +47,7 @@ export default function Slots() {
   const handleActivate = (idx: number) => {
     if (!saveData) return;
     updateSave.mutate(
-      { ...saveData, activeSlot: idx },
+      { data: { ...saveData, activeSlot: idx } },
       {
         onSuccess: () =>
           queryClient.invalidateQueries({ queryKey: getGetSaveDataQueryKey() }),
@@ -63,7 +63,7 @@ export default function Slots() {
         ? Math.max(0, newSlots.length - 1)
         : activeSlot;
     updateSave.mutate(
-      { slots: newSlots, activeSlot: newActive },
+      { data: { slots: newSlots, activeSlot: newActive } },
       {
         onSuccess: () =>
           queryClient.invalidateQueries({ queryKey: getGetSaveDataQueryKey() }),
