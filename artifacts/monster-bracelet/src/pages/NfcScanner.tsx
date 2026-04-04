@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   useParseNfc,
@@ -11,7 +11,7 @@ import type {
   NfcParseResponse,
 } from "@workspace/api-client-react/src/generated/api.schemas";
 import { useQueryClient } from "@tanstack/react-query";
-import { ScanBarcode, CheckCircle, AlertCircle } from "lucide-react";
+import { ScanBarcode, CheckCircle, AlertCircle, Wifi } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { nanoid } from "nanoid";
 
@@ -48,12 +48,15 @@ function TypeBadge({ type }: { type: string }) {
   );
 }
 
+const hasWebNfc = typeof window !== "undefined" && "NDEFReader" in window;
+
 export default function NfcScanner() {
   const queryClient = useQueryClient();
   const [code, setCode] = useState("");
   const [parsed, setParsed] = useState<NfcParseResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
+  const [nfcScanning, setNfcScanning] = useState(false);
 
   const parseNfc = useParseNfc();
   const { data: saveData } = useGetSaveData({
@@ -61,20 +64,77 @@ export default function NfcScanner() {
   });
   const updateSave = useUpdateSaveData();
 
-  const handleScan = () => {
+  const submitCode = useCallback(
+    (codeToSubmit: string) => {
+      const trimmed = codeToSubmit.trim();
+      if (!trimmed) return;
+      setError(null);
+      setParsed(null);
+      setSuccess(false);
+      parseNfc.mutate(
+        { code: trimmed },
+        {
+          onSuccess: (data) => setParsed(data as NfcParseResponse),
+          onError: (err: unknown) => {
+            const msg =
+              (err as { response?: { data?: { error?: string } } })?.response
+                ?.data?.error ?? "Invalid NFC code";
+            setError(msg);
+          },
+        }
+      );
+    },
+    [parseNfc]
+  );
+
+  const handleScan = () => submitCode(code);
+
+  const handleNfcScan = async () => {
+    if (!hasWebNfc) {
+      setError(
+        "Web NFC is not supported on this device. Use Chrome on Android with NFC enabled."
+      );
+      return;
+    }
     setError(null);
     setParsed(null);
     setSuccess(false);
-    parseNfc.mutate(
-      { code: code.trim() },
-      {
-        onSuccess: (data) => setParsed(data as NfcParseResponse),
-        onError: (err: unknown) => {
-          const msg = (err as { response?: { data?: { error?: string } } })?.response?.data?.error ?? "Invalid NFC code";
-          setError(msg);
-        },
+    setNfcScanning(true);
+    try {
+      // @ts-expect-error NDEFReader is not in default TS lib
+      const ndef = new window.NDEFReader();
+      await ndef.scan();
+      ndef.onreadingerror = () => {
+        setError("Could not read NFC tag. Make sure the tag has a text record.");
+        setNfcScanning(false);
+      };
+      ndef.onreading = (event: {
+        message: { records: { recordType: string; data: ArrayBuffer; encoding?: string }[] };
+      }) => {
+        setNfcScanning(false);
+        const textRecord = event.message.records.find(
+          (r) => r.recordType === "text"
+        );
+        if (!textRecord) {
+          setError("NFC tag has no text record. Expected HP/ATK/DEF/SPATK/SPDEF/SPD/POKEDEX format.");
+          return;
+        }
+        const decoder = new TextDecoder(textRecord.encoding ?? "utf-8");
+        const text = decoder.decode(textRecord.data);
+        setCode(text);
+        submitCode(text);
+      };
+    } catch (err) {
+      setNfcScanning(false);
+      const e = err as Error;
+      if (e.name === "NotAllowedError") {
+        setError("NFC permission denied. Allow NFC access and try again.");
+      } else if (e.name === "NotSupportedError") {
+        setError("NFC is not available on this device.");
+      } else {
+        setError(`NFC error: ${e.message}`);
       }
-    );
+    }
   };
 
   const handleConfirm = () => {
@@ -93,7 +153,8 @@ export default function NfcScanner() {
       hunger: 50,
       happiness: 50,
       stage: parsed.pokemon.evolution_stage as MonsterInstance["stage"],
-      evolutionTimer: parsed.pokemon.evolution_stage === "final" ? Date.now() : null,
+      evolutionTimer:
+        parsed.pokemon.evolution_stage === "final" ? Date.now() : null,
       megaFormId: null,
       createdAt: Date.now(),
       lastFed: null,
@@ -143,7 +204,33 @@ export default function NfcScanner() {
         </p>
       </div>
 
-      {/* Input area */}
+      {/* Web NFC Button — shown when browser supports it */}
+      {hasWebNfc && (
+        <button
+          onClick={handleNfcScan}
+          disabled={nfcScanning || parseNfc.isPending}
+          className={cn(
+            "w-full py-4 rounded-xl font-medium text-sm flex items-center justify-center gap-2 border-2 transition-all",
+            nfcScanning
+              ? "border-primary bg-primary/10 text-primary animate-pulse cursor-wait"
+              : "border-primary/40 bg-primary/5 text-primary hover:bg-primary/10 hover:border-primary active:scale-95"
+          )}
+        >
+          <Wifi className="w-5 h-5" />
+          {nfcScanning ? "Hold NFC card to phone…" : "Scan NFC Card"}
+        </button>
+      )}
+
+      {/* Divider */}
+      <div className="flex items-center gap-2">
+        <div className="flex-1 h-px bg-border" />
+        <span className="text-[10px] font-mono text-muted-foreground uppercase tracking-widest">
+          {hasWebNfc ? "or enter code manually" : "enter code"}
+        </span>
+        <div className="flex-1 h-px bg-border" />
+      </div>
+
+      {/* Manual input area */}
       <div className="bg-card rounded-xl border border-card-border p-4 space-y-3">
         <label className="text-[10px] font-mono uppercase text-muted-foreground tracking-widest">
           NFC Code
@@ -186,9 +273,9 @@ export default function NfcScanner() {
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
-            className="flex items-center gap-2 bg-destructive/10 border border-destructive/30 text-destructive-foreground rounded-xl px-3 py-2.5 text-xs"
+            className="flex items-start gap-2 bg-destructive/10 border border-destructive/30 text-destructive-foreground rounded-xl px-3 py-2.5 text-xs"
           >
-            <AlertCircle className="w-4 h-4 shrink-0 text-destructive" />
+            <AlertCircle className="w-4 h-4 shrink-0 text-destructive mt-0.5" />
             {error}
           </motion.div>
         )}
@@ -307,6 +394,7 @@ export default function NfcScanner() {
                 setCode(ex.code);
                 setError(null);
                 setParsed(null);
+                submitCode(ex.code);
               }}
               className="w-full text-left px-3 py-2 rounded-lg bg-background hover:bg-white/5 border border-border hover:border-primary/30 transition-all group"
             >
@@ -320,6 +408,18 @@ export default function NfcScanner() {
           ))}
         </div>
       </div>
+
+      {/* NFC info note */}
+      {!hasWebNfc && (
+        <div className="flex items-start gap-2 bg-card border border-card-border rounded-xl px-3 py-3 text-[11px] text-muted-foreground">
+          <Wifi className="w-4 h-4 shrink-0 mt-0.5 text-primary/50" />
+          <span>
+            To scan real NFC cards, open this app in{" "}
+            <strong className="text-foreground">Chrome on Android</strong> with
+            NFC enabled. You can write codes to NFC tags using any NFC writer app.
+          </span>
+        </div>
+      )}
     </div>
   );
 }
