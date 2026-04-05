@@ -1,6 +1,6 @@
 import { type ReactNode, useEffect } from "react";
 import { Link, useLocation } from "wouter";
-import { Home, ScanBarcode, Save, BookOpen, Swords } from "lucide-react";
+import { Home, ScanBarcode, Save, BookOpen, Swords, ArrowLeftRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface MobileFrameProps {
@@ -42,11 +42,12 @@ function BottomNav() {
   const [location] = useLocation();
 
   const navItems = [
-    { path: "/",        icon: Home,        label: "Home"   },
-    { path: "/slots",   icon: Save,        label: "Slots"  },
-    { path: "/battle",  icon: Swords,      label: "Battle" },
-    { path: "/pokedex", icon: BookOpen,    label: "Dex"    },
-    { path: "/nfc",     icon: ScanBarcode, label: "NFC"    },
+    { path: "/",        icon: Home,           label: "Home"   },
+    { path: "/slots",   icon: Save,           label: "Slots"  },
+    { path: "/battle",  icon: Swords,         label: "Battle" },
+    { path: "/trade",   icon: ArrowLeftRight, label: "Trade"  },
+    { path: "/pokedex", icon: BookOpen,       label: "Dex"    },
+    { path: "/nfc",     icon: ScanBarcode,    label: "NFC"    },
   ];
 
   return (
@@ -59,7 +60,7 @@ function BottomNav() {
             key={item.path}
             href={item.path}
             className={cn(
-              "flex flex-col items-center justify-center w-12 h-14 rounded-xl transition-all duration-200 active:scale-95",
+              "flex flex-col items-center justify-center w-10 h-14 rounded-xl transition-all duration-200 active:scale-95",
               isActive
                 ? "bg-primary/10 text-primary"
                 : "text-muted-foreground hover:text-foreground hover:bg-white/5"

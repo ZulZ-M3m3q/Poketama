@@ -11,6 +11,7 @@ import NfcScanner from "@/pages/NfcScanner";
 import Slots from "@/pages/Slots";
 import Pokedex from "@/pages/Pokedex";
 import Battle from "@/pages/Battle";
+import Trade from "@/pages/Trade";
 import NotFound from "@/pages/not-found";
 
 const clerkPubKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
@@ -64,6 +65,7 @@ function GameRouter() {
         <Route path="/slots" component={Slots} />
         <Route path="/pokedex" component={Pokedex} />
         <Route path="/battle" component={Battle} />
+        <Route path="/trade" component={Trade} />
         <Route component={NotFound} />
       </Switch>
     </MobileFrame>
