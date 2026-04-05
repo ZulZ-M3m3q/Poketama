@@ -276,6 +276,14 @@ export default function Home() {
       happiness: Math.min(100, monster.happiness + 5),
       feedCooldown: Date.now() + 8000,
       lastFed: Date.now(),
+      stats: {
+        hp:    monster.stats.hp    + 10,
+        atk:   monster.stats.atk   + 10,
+        def:   monster.stats.def   + 10,
+        spatk: monster.stats.spatk + 10,
+        spdef: monster.stats.spdef + 10,
+        spd:   monster.stats.spd   + 10,
+      },
     });
   };
 

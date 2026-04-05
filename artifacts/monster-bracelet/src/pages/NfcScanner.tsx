@@ -52,7 +52,6 @@ const hasWebNfc = typeof window !== "undefined" && "NDEFReader" in window;
 
 export default function NfcScanner() {
   const queryClient = useQueryClient();
-  const [code, setCode] = useState("");
   const [parsed, setParsed] = useState<NfcParseResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
@@ -87,8 +86,6 @@ export default function NfcScanner() {
     [parseNfc]
   );
 
-  const handleScan = () => submitCode(code);
-
   const handleNfcScan = async () => {
     if (!hasWebNfc) {
       setError(
@@ -121,7 +118,6 @@ export default function NfcScanner() {
         }
         const decoder = new TextDecoder(textRecord.encoding ?? "utf-8");
         const text = decoder.decode(textRecord.data);
-        setCode(text);
         submitCode(text);
       };
     } catch (err) {
@@ -175,21 +171,12 @@ export default function NfcScanner() {
           queryClient.invalidateQueries({ queryKey: getGetSaveDataQueryKey() });
           setSuccess(true);
           setParsed(null);
-          setCode("");
           setTimeout(() => setSuccess(false), 3000);
         },
         onError: () => setError("Failed to save monster"),
       }
     );
   };
-
-  const EXAMPLE_CODES = [
-    { label: "Charmander (fire starter)", code: "39/52/43/60/50/65/4" },
-    { label: "Pikachu (electric mouse)", code: "35/55/40/50/50/90/25" },
-    { label: "Eevee (multi-path)", code: "55/55/50/45/65/55/133" },
-    { label: "Mewtwo (legendary)", code: "106/110/90/154/90/130/150" },
-    { label: "Gengar (ghost)", code: "60/65/60/130/75/110/94" },
-  ];
 
   return (
     <div className="flex flex-col gap-4 p-4">
@@ -202,71 +189,43 @@ export default function NfcScanner() {
           </h1>
         </div>
         <p className="text-xs text-muted-foreground font-mono">
-          Format: HP/ATK/DEF/SPATK/SPDEF/SPD/POKEDEX
+          Tap your NFC card to scan your Pokémon
         </p>
       </div>
 
-      {/* Web NFC Button — shown when browser supports it */}
-      {hasWebNfc && (
-        <button
-          onClick={handleNfcScan}
-          disabled={nfcScanning || parseNfc.isPending}
-          className={cn(
-            "w-full py-4 rounded-xl font-medium text-sm flex items-center justify-center gap-2 border-2 transition-all",
-            nfcScanning
-              ? "border-primary bg-primary/10 text-primary animate-pulse cursor-wait"
-              : "border-primary/40 bg-primary/5 text-primary hover:bg-primary/10 hover:border-primary active:scale-95"
-          )}
-        >
-          <Wifi className="w-5 h-5" />
-          {nfcScanning ? "Hold NFC card to phone…" : "Scan NFC Card"}
-        </button>
-      )}
-
-      {/* Divider */}
-      <div className="flex items-center gap-2">
-        <div className="flex-1 h-px bg-border" />
-        <span className="text-[10px] font-mono text-muted-foreground uppercase tracking-widest">
-          {hasWebNfc ? "or enter code manually" : "enter code"}
+      {/* NFC Scan button */}
+      <button
+        onClick={handleNfcScan}
+        disabled={nfcScanning || parseNfc.isPending}
+        className={cn(
+          "w-full py-10 rounded-2xl font-medium text-sm flex flex-col items-center justify-center gap-3 border-2 transition-all",
+          nfcScanning
+            ? "border-primary bg-primary/10 text-primary animate-pulse cursor-wait"
+            : "border-primary/40 bg-primary/5 text-primary hover:bg-primary/10 hover:border-primary active:scale-95"
+        )}
+      >
+        <Wifi className={cn("w-10 h-10", nfcScanning && "animate-pulse")} />
+        <span className="font-mono text-base">
+          {nfcScanning ? "Hold NFC card to phone…" : "Tap to Scan NFC Card"}
         </span>
-        <div className="flex-1 h-px bg-border" />
-      </div>
+        {!nfcScanning && (
+          <span className="text-xs text-primary/60 font-mono">
+            Format: HP/ATK/DEF/SPATK/SPDEF/SPD/POKEDEX
+          </span>
+        )}
+      </button>
 
-      {/* Manual input area */}
-      <div className="bg-card rounded-xl border border-card-border p-4 space-y-3">
-        <label className="text-[10px] font-mono uppercase text-muted-foreground tracking-widest">
-          NFC Code
-        </label>
-        <input
-          type="text"
-          value={code}
-          onChange={(e) => {
-            setCode(e.target.value);
-            setError(null);
-            setParsed(null);
-          }}
-          placeholder="e.g. 39/52/43/60/50/65/4"
-          className="w-full bg-background border border-border rounded-lg px-3 py-2.5 text-sm font-mono text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/20 transition-all"
-          onKeyDown={(e) => e.key === "Enter" && handleScan()}
-        />
-        <button
-          onClick={handleScan}
-          disabled={!code.trim() || parseNfc.isPending}
-          className="w-full py-2.5 bg-primary text-primary-foreground rounded-lg font-medium text-sm hover:bg-primary/90 active:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-        >
-          {parseNfc.isPending ? (
-            <>
-              <div className="w-4 h-4 border-2 border-primary-foreground border-t-transparent rounded-full animate-spin" />
-              Scanning...
-            </>
-          ) : (
-            <>
-              <ScanBarcode className="w-4 h-4" />
-              Scan Code
-            </>
-          )}
-        </button>
-      </div>
+      {/* No NFC support notice */}
+      {!hasWebNfc && (
+        <div className="flex items-start gap-2 bg-card border border-card-border rounded-xl px-3 py-3 text-[11px] text-muted-foreground">
+          <Wifi className="w-4 h-4 shrink-0 mt-0.5 text-primary/50" />
+          <span>
+            NFC scanning requires{" "}
+            <strong className="text-foreground">Chrome on Android</strong> with
+            NFC enabled. Open this app there to scan physical NFC cards.
+          </span>
+        </div>
+      )}
 
       {/* Error */}
       <AnimatePresence>
@@ -382,46 +341,6 @@ export default function NfcScanner() {
           </motion.div>
         )}
       </AnimatePresence>
-
-      {/* Example codes */}
-      <div className="bg-card rounded-xl border border-card-border p-4">
-        <div className="text-[10px] font-mono uppercase text-muted-foreground tracking-widest mb-3">
-          Example Codes
-        </div>
-        <div className="space-y-1.5">
-          {EXAMPLE_CODES.map((ex) => (
-            <button
-              key={ex.code}
-              onClick={() => {
-                setCode(ex.code);
-                setError(null);
-                setParsed(null);
-                submitCode(ex.code);
-              }}
-              className="w-full text-left px-3 py-2 rounded-lg bg-background hover:bg-white/5 border border-border hover:border-primary/30 transition-all group"
-            >
-              <div className="text-xs text-muted-foreground group-hover:text-foreground transition-colors">
-                {ex.label}
-              </div>
-              <div className="text-[10px] font-mono text-primary/70 mt-0.5">
-                {ex.code}
-              </div>
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* NFC info note */}
-      {!hasWebNfc && (
-        <div className="flex items-start gap-2 bg-card border border-card-border rounded-xl px-3 py-3 text-[11px] text-muted-foreground">
-          <Wifi className="w-4 h-4 shrink-0 mt-0.5 text-primary/50" />
-          <span>
-            To scan real NFC cards, open this app in{" "}
-            <strong className="text-foreground">Chrome on Android</strong> with
-            NFC enabled. You can write codes to NFC tags using any NFC writer app.
-          </span>
-        </div>
-      )}
     </div>
   );
 }
