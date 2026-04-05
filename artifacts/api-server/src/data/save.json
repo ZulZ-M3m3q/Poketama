@@ -39,27 +39,48 @@
     {
       "id": "aTgEPHe9fUbCpoCBK1F1a",
       "pokedexId": 133,
-      "level": 1,
+      "level": 3,
       "stats": {
-        "hp": 55,
-        "atk": 55,
-        "def": 50,
-        "spatk": 45,
-        "spdef": 65,
-        "spd": 55
+        "hp": 61,
+        "atk": 61,
+        "def": 56,
+        "spatk": 51,
+        "spdef": 73,
+        "spd": 61
       },
-      "hunger": 75,
-      "happiness": 55,
+      "hunger": 85,
+      "happiness": 91,
       "stage": "base",
       "evolutionTimer": null,
       "megaFormId": null,
       "createdAt": 1775371050080,
-      "lastFed": 1775371092913,
-      "lastTrained": 1775371136975,
-      "feedCooldown": 1775371100913,
-      "trainCooldown": 1775371148975,
-      "losses": 2
+      "lastFed": 1775371560332,
+      "lastTrained": 1775371568283,
+      "feedCooldown": 1775371568332,
+      "trainCooldown": 1775371580283,
+      "losses": 4,
+      "wins": 2,
+      "moves": [
+        {
+          "id": "body_slam",
+          "name": "Body Slam",
+          "type": "normal",
+          "power": 85,
+          "category": "physical",
+          "accuracy": 100,
+          "description": "A full-body slam that may paralyze."
+        },
+        {
+          "id": "hyper_beam",
+          "name": "Hyper Beam",
+          "type": "normal",
+          "power": 150,
+          "category": "special",
+          "accuracy": 90,
+          "description": "Fires a powerful beam of energy."
+        }
+      ]
     }
   ],
-  "activeSlot": 1
+  "activeSlot": 0
 }
