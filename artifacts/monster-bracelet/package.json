@@ -75,6 +75,7 @@
     "zod": "catalog:"
   },
   "dependencies": {
+    "@clerk/react": "^6.1.4",
     "nanoid": "^5.1.7"
   }
 }

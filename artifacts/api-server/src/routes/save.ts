@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { getAuth } from "@clerk/express";
 import { fileURLToPath } from "url";
 import path from "path";
 import fs from "fs";
@@ -7,20 +8,33 @@ const router = Router();
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ARTIFACT_ROOT = path.resolve(__dirname, "..");
-const SAVE_FILE = path.resolve(ARTIFACT_ROOT, "src/data/save.json");
+const SAVES_DIR = path.resolve(ARTIFACT_ROOT, "src/data/saves");
 const POKEMON_FILE = path.resolve(ARTIFACT_ROOT, "src/data/pokemon.json");
 
-function loadSave(): unknown {
+// Ensure per-user saves directory exists
+if (!fs.existsSync(SAVES_DIR)) {
+  fs.mkdirSync(SAVES_DIR, { recursive: true });
+}
+
+function getUserSaveFile(userId: string): string {
+  const safe = userId.replace(/[^a-zA-Z0-9_-]/g, "_");
+  return path.join(SAVES_DIR, `${safe}.json`);
+}
+
+function loadSave(userId: string): unknown {
   try {
-    const raw = fs.readFileSync(SAVE_FILE, "utf-8");
+    const file = getUserSaveFile(userId);
+    if (!fs.existsSync(file)) return { slots: [], activeSlot: 0 };
+    const raw = fs.readFileSync(file, "utf-8");
     return JSON.parse(raw);
   } catch {
     return { slots: [], activeSlot: 0 };
   }
 }
 
-function writeSave(data: unknown): void {
-  fs.writeFileSync(SAVE_FILE, JSON.stringify(data, null, 2), "utf-8");
+function writeSave(userId: string, data: unknown): void {
+  const file = getUserSaveFile(userId);
+  fs.writeFileSync(file, JSON.stringify(data, null, 2), "utf-8");
 }
 
 function loadPokemon(): Array<{ id: number }> {
@@ -29,8 +43,14 @@ function loadPokemon(): Array<{ id: number }> {
 }
 
 router.get("/save", (req, res) => {
+  const auth = getAuth(req);
+  const userId = auth?.userId;
+  if (!userId) {
+    res.status(401).json({ error: "Unauthorized" });
+    return;
+  }
   try {
-    const save = loadSave();
+    const save = loadSave(userId);
     res.json(save);
   } catch (err) {
     req.log.error({ err }, "Failed to load save data");
@@ -39,9 +59,15 @@ router.get("/save", (req, res) => {
 });
 
 router.post("/save", (req, res) => {
+  const auth = getAuth(req);
+  const userId = auth?.userId;
+  if (!userId) {
+    res.status(401).json({ error: "Unauthorized" });
+    return;
+  }
   try {
     const body = req.body;
-    writeSave(body);
+    writeSave(userId, body);
     res.json(body);
   } catch (err) {
     req.log.error({ err }, "Failed to write save data");

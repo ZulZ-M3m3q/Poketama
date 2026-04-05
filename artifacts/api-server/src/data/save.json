@@ -65,46 +65,46 @@
     },
     {
       "id": "aTgEPHe9fUbCpoCBK1F1a",
-      "pokedexId": 133,
-      "level": 40,
+      "pokedexId": 136,
+      "level": 45,
       "stats": {
-        "hp": 424,
-        "atk": 424,
-        "def": 388,
-        "spatk": 356,
-        "spdef": 493,
-        "spd": 424
+        "hp": 544,
+        "atk": 544,
+        "def": 498,
+        "spatk": 456,
+        "spdef": 632,
+        "spd": 544
       },
-      "hunger": 0,
+      "hunger": 80,
       "happiness": 100,
-      "stage": "base",
-      "evolutionTimer": null,
+      "stage": "final",
+      "evolutionTimer": 1775375669795,
       "megaFormId": null,
       "createdAt": 1775371050080,
-      "lastFed": 1775375019794,
-      "lastTrained": 1775375018323,
-      "feedCooldown": 1775375027794,
-      "trainCooldown": 1775375030323,
+      "lastFed": 1775375817427,
+      "lastTrained": 1775375804355,
+      "feedCooldown": 1775375825427,
+      "trainCooldown": 1775375816355,
       "losses": 8,
-      "wins": 29,
+      "wins": 33,
       "moves": [
         {
-          "id": "body_slam",
-          "name": "Body Slam",
-          "type": "normal",
-          "power": 85,
-          "category": "physical",
+          "id": "flamethrower",
+          "name": "Flamethrower",
+          "type": "fire",
+          "power": 90,
+          "category": "special",
           "accuracy": 100,
-          "description": "A full-body slam that may paralyze."
+          "description": "A scorching stream of fire."
         },
         {
-          "id": "hyper_beam",
-          "name": "Hyper Beam",
-          "type": "normal",
-          "power": 150,
+          "id": "heat_wave",
+          "name": "Heat Wave",
+          "type": "fire",
+          "power": 95,
           "category": "special",
           "accuracy": 90,
-          "description": "Fires a powerful beam of energy."
+          "description": "Exhales a hot breath at all foes."
         },
         {
           "id": "quick_attack",
@@ -116,13 +116,13 @@
           "description": "Strikes before the opponent."
         },
         {
-          "id": "double_edge",
-          "name": "Double-Edge",
-          "type": "normal",
-          "power": 120,
-          "category": "physical",
-          "accuracy": 100,
-          "description": "A reckless tackle that also hurts the user."
+          "id": "fire_blast",
+          "name": "Fire Blast",
+          "type": "fire",
+          "power": 110,
+          "category": "special",
+          "accuracy": 85,
+          "description": "An explosive blast of fire."
         }
       ]
     },
