@@ -5,22 +5,22 @@
       "pokedexId": 133,
       "level": 1,
       "stats": {
-        "hp": 55,
-        "atk": 55,
-        "def": 50,
-        "spatk": 45,
-        "spdef": 65,
-        "spd": 55
+        "hp": 75,
+        "atk": 75,
+        "def": 70,
+        "spatk": 65,
+        "spdef": 85,
+        "spd": 75
       },
-      "hunger": 70,
-      "happiness": 55,
+      "hunger": 100,
+      "happiness": 65,
       "stage": "base",
       "evolutionTimer": null,
       "megaFormId": null,
       "createdAt": 1775408081113,
-      "lastFed": 1775408166813,
+      "lastFed": 1775408575256,
       "lastTrained": 1775408162907,
-      "feedCooldown": 1775408174813,
+      "feedCooldown": 1775408583256,
       "trainCooldown": 1775408174907,
       "losses": 1
     }
