@@ -642,7 +642,7 @@ export default function Home() {
       )}
 
       {/* Action buttons */}
-      <div className="grid grid-cols-3 gap-2 mt-auto">
+      <div className="sticky bottom-0 grid grid-cols-3 gap-2 bg-background/90 backdrop-blur-sm pt-2 pb-1 -mx-4 px-4">
         <CooldownButton label="Feed" icon={Apple} cooldownTs={monster.feedCooldown} onClick={handleFeed} variant="amber" />
         <CooldownButton label="Train" icon={Swords} cooldownTs={monster.trainCooldown} onClick={handleTrain} variant="secondary" />
         {evolutionReady && (
