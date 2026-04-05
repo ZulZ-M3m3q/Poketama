@@ -1,27 +1,30 @@
 {
   "slots": [
     {
-      "id": "3os67Kd7BCqaNGxXUmzLU",
-      "pokedexId": 6,
-      "level": 53,
+      "id": "test-mon-1",
+      "pokedexId": 4,
+      "level": 8,
       "stats": {
-        "hp": 607,
-        "atk": 770,
-        "def": 664,
-        "spatk": 868,
-        "spdef": 740,
-        "spd": 938
+        "hp": 90,
+        "atk": 72,
+        "def": 58,
+        "spatk": 80,
+        "spdef": 65,
+        "spd": 88
       },
-      "hunger": 100,
-      "happiness": 100,
-      "stage": "final",
-      "evolutionTimer": 1775330770335,
+      "hunger": 70,
+      "happiness": 60,
+      "stage": "base",
+      "evolutionTimer": null,
       "megaFormId": null,
       "createdAt": 1775329596419,
-      "lastFed": 1775369841837,
-      "lastTrained": 1775369838243,
-      "feedCooldown": 1775369849837,
-      "trainCooldown": 1775369848243
+      "lastFed": null,
+      "lastTrained": null,
+      "feedCooldown": null,
+      "trainCooldown": null,
+      "moves": [],
+      "wins": 0,
+      "losses": 0
     }
   ],
   "activeSlot": 0

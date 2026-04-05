@@ -1,6 +1,6 @@
 import { type ReactNode, useEffect } from "react";
 import { Link, useLocation } from "wouter";
-import { Home, ScanBarcode, Save, BookOpen } from "lucide-react";
+import { Home, ScanBarcode, Save, BookOpen, Swords } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface MobileFrameProps {
@@ -42,10 +42,11 @@ function BottomNav() {
   const [location] = useLocation();
 
   const navItems = [
-    { path: "/", icon: Home, label: "Home" },
-    { path: "/slots", icon: Save, label: "Slots" },
-    { path: "/pokedex", icon: BookOpen, label: "Dex" },
-    { path: "/nfc", icon: ScanBarcode, label: "NFC" },
+    { path: "/",        icon: Home,        label: "Home"   },
+    { path: "/slots",   icon: Save,        label: "Slots"  },
+    { path: "/battle",  icon: Swords,      label: "Battle" },
+    { path: "/pokedex", icon: BookOpen,    label: "Dex"    },
+    { path: "/nfc",     icon: ScanBarcode, label: "NFC"    },
   ];
 
   return (
@@ -58,15 +59,15 @@ function BottomNav() {
             key={item.path}
             href={item.path}
             className={cn(
-              "flex flex-col items-center justify-center w-16 h-14 rounded-xl transition-all duration-200 active:scale-95",
-              isActive 
-                ? "bg-primary/10 text-primary" 
+              "flex flex-col items-center justify-center w-12 h-14 rounded-xl transition-all duration-200 active:scale-95",
+              isActive
+                ? "bg-primary/10 text-primary"
                 : "text-muted-foreground hover:text-foreground hover:bg-white/5"
             )}
             data-testid={`nav-${item.label.toLowerCase()}`}
           >
-            <Icon className={cn("w-6 h-6 mb-1", isActive && "drop-shadow-[0_0_8px_rgba(33,214,142,0.8)]")} strokeWidth={isActive ? 2.5 : 2} />
-            <span className="text-[10px] font-medium tracking-wide uppercase">{item.label}</span>
+            <Icon className={cn("w-5 h-5 mb-1", isActive && "drop-shadow-[0_0_8px_rgba(33,214,142,0.8)]")} strokeWidth={isActive ? 2.5 : 2} />
+            <span className="text-[9px] font-medium tracking-wide uppercase">{item.label}</span>
           </Link>
         );
       })}

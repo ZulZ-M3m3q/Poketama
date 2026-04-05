@@ -8,6 +8,7 @@ import Home from "@/pages/Home";
 import NfcScanner from "@/pages/NfcScanner";
 import Slots from "@/pages/Slots";
 import Pokedex from "@/pages/Pokedex";
+import Battle from "@/pages/Battle";
 import NotFound from "@/pages/not-found";
 
 const queryClient = new QueryClient();
@@ -19,6 +20,7 @@ function Router() {
       <Route path="/nfc" component={NfcScanner} />
       <Route path="/slots" component={Slots} />
       <Route path="/pokedex" component={Pokedex} />
+      <Route path="/battle" component={Battle} />
       <Route component={NotFound} />
     </Switch>
   );
