@@ -3,17 +3,17 @@
     {
       "id": "test-mon-1",
       "pokedexId": 4,
-      "level": 8,
+      "level": 10,
       "stats": {
-        "hp": 90,
-        "atk": 72,
-        "def": 58,
-        "spatk": 80,
-        "spdef": 65,
-        "spd": 88
+        "hp": 100,
+        "atk": 80,
+        "def": 65,
+        "spatk": 89,
+        "spdef": 73,
+        "spd": 98
       },
-      "hunger": 70,
-      "happiness": 60,
+      "hunger": 50,
+      "happiness": 72,
       "stage": "base",
       "evolutionTimer": null,
       "megaFormId": null,
@@ -22,10 +22,44 @@
       "lastTrained": null,
       "feedCooldown": null,
       "trainCooldown": null,
-      "moves": [],
-      "wins": 0,
+      "moves": [
+        {
+          "id": "ember",
+          "name": "Ember",
+          "type": "fire",
+          "power": 40,
+          "category": "special",
+          "accuracy": 100,
+          "description": "Small embers that may burn."
+        }
+      ],
+      "wins": 1,
       "losses": 0
+    },
+    {
+      "id": "aTgEPHe9fUbCpoCBK1F1a",
+      "pokedexId": 133,
+      "level": 1,
+      "stats": {
+        "hp": 55,
+        "atk": 55,
+        "def": 50,
+        "spatk": 45,
+        "spdef": 65,
+        "spd": 55
+      },
+      "hunger": 75,
+      "happiness": 55,
+      "stage": "base",
+      "evolutionTimer": null,
+      "megaFormId": null,
+      "createdAt": 1775371050080,
+      "lastFed": 1775371092913,
+      "lastTrained": 1775371136975,
+      "feedCooldown": 1775371100913,
+      "trainCooldown": 1775371148975,
+      "losses": 2
     }
   ],
-  "activeSlot": 0
+  "activeSlot": 1
 }

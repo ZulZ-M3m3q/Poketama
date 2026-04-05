@@ -354,24 +354,32 @@ export default function Home() {
       clearInterval(battleTimerRef.current);
       battleTimerRef.current = null;
     }
+
+    let openingMoveLearn = false;
     if (battleResult?.won && pendingMonster && pokemon) {
-      // Check for learnable moves
       const learnable = getLearnableMoves(pendingMonster, pokemon, 3);
       if (learnable.length > 0) {
         setMoveOptions(learnable);
         setSelectedMove(null);
         setReplaceMode(false);
         setMoveLearnOpen(true);
+        openingMoveLearn = true;
       } else {
+        // No new moves available — save the level-up directly
         saveMonster(pendingMonster);
       }
     }
+
     setBattleOpen(false);
     setBattleResult(null);
     setBattleOpponent(null);
     setBattleLogShown(0);
     setBattlePhase("setup");
-    setPendingMonster(null);
+
+    // Only clear pendingMonster if we're NOT handing it off to the move-learn modal
+    if (!openingMoveLearn) {
+      setPendingMonster(null);
+    }
   }, [battleResult, pendingMonster, pokemon, saveMonster]);
 
   // ── Move learning ───────────────────────────────────────────────────────────
