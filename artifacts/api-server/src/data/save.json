@@ -2,26 +2,26 @@
   "slots": [
     {
       "id": "test-mon-1",
-      "pokedexId": 4,
-      "level": 10,
+      "pokedexId": 5,
+      "level": 29,
       "stats": {
-        "hp": 100,
-        "atk": 80,
-        "def": 65,
-        "spatk": 89,
-        "spdef": 73,
-        "spd": 98
+        "hp": 265,
+        "atk": 216,
+        "def": 180,
+        "spatk": 239,
+        "spdef": 199,
+        "spd": 263
       },
-      "hunger": 50,
-      "happiness": 72,
-      "stage": "base",
+      "hunger": 20,
+      "happiness": 100,
+      "stage": "mid",
       "evolutionTimer": null,
       "megaFormId": null,
       "createdAt": 1775329596419,
-      "lastFed": null,
-      "lastTrained": null,
-      "feedCooldown": null,
-      "trainCooldown": null,
+      "lastFed": 1775374892172,
+      "lastTrained": 1775375039307,
+      "feedCooldown": 1775374900172,
+      "trainCooldown": 1775375051307,
       "moves": [
         {
           "id": "ember",
@@ -31,35 +31,62 @@
           "category": "special",
           "accuracy": 100,
           "description": "Small embers that may burn."
+        },
+        {
+          "id": "fire_blast",
+          "name": "Fire Blast",
+          "type": "fire",
+          "power": 110,
+          "category": "special",
+          "accuracy": 85,
+          "description": "An explosive blast of fire."
+        },
+        {
+          "id": "inferno",
+          "name": "Inferno",
+          "type": "fire",
+          "power": 100,
+          "category": "special",
+          "accuracy": 50,
+          "description": "Burns the target with intense fire."
+        },
+        {
+          "id": "heat_wave",
+          "name": "Heat Wave",
+          "type": "fire",
+          "power": 95,
+          "category": "special",
+          "accuracy": 90,
+          "description": "Exhales a hot breath at all foes."
         }
       ],
-      "wins": 1,
-      "losses": 0
+      "wins": 17,
+      "losses": 9
     },
     {
       "id": "aTgEPHe9fUbCpoCBK1F1a",
       "pokedexId": 133,
-      "level": 3,
+      "level": 40,
       "stats": {
-        "hp": 61,
-        "atk": 61,
-        "def": 56,
-        "spatk": 51,
-        "spdef": 73,
-        "spd": 61
+        "hp": 424,
+        "atk": 424,
+        "def": 388,
+        "spatk": 356,
+        "spdef": 493,
+        "spd": 424
       },
-      "hunger": 85,
-      "happiness": 91,
+      "hunger": 0,
+      "happiness": 100,
       "stage": "base",
       "evolutionTimer": null,
       "megaFormId": null,
       "createdAt": 1775371050080,
-      "lastFed": 1775371560332,
-      "lastTrained": 1775371568283,
-      "feedCooldown": 1775371568332,
-      "trainCooldown": 1775371580283,
-      "losses": 4,
-      "wins": 2,
+      "lastFed": 1775375019794,
+      "lastTrained": 1775375018323,
+      "feedCooldown": 1775375027794,
+      "trainCooldown": 1775375030323,
+      "losses": 8,
+      "wins": 29,
       "moves": [
         {
           "id": "body_slam",
@@ -78,9 +105,50 @@
           "category": "special",
           "accuracy": 90,
           "description": "Fires a powerful beam of energy."
+        },
+        {
+          "id": "quick_attack",
+          "name": "Quick Attack",
+          "type": "normal",
+          "power": 40,
+          "category": "physical",
+          "accuracy": 100,
+          "description": "Strikes before the opponent."
+        },
+        {
+          "id": "double_edge",
+          "name": "Double-Edge",
+          "type": "normal",
+          "power": 120,
+          "category": "physical",
+          "accuracy": 100,
+          "description": "A reckless tackle that also hurts the user."
         }
       ]
+    },
+    {
+      "id": "nmbtbK6nR0RXIlvDpRMMa",
+      "pokedexId": 1,
+      "level": 1,
+      "stats": {
+        "hp": 1,
+        "atk": 1,
+        "def": 1,
+        "spatk": 1,
+        "spdef": 1,
+        "spd": 1
+      },
+      "hunger": 50,
+      "happiness": 50,
+      "stage": "base",
+      "evolutionTimer": null,
+      "megaFormId": null,
+      "createdAt": 1775375357333,
+      "lastFed": null,
+      "lastTrained": null,
+      "feedCooldown": null,
+      "trainCooldown": null
     }
   ],
-  "activeSlot": 0
+  "activeSlot": 1
 }

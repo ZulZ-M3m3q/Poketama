@@ -15,6 +15,8 @@ export function calculateCooldownRemaining(timestamp: number | null): number {
 
 export function checkEvolutionReady(instance: MonsterInstance, pokemon: Pokemon): boolean {
   if (!pokemon.possible_evolutions || pokemon.possible_evolutions.length === 0) return false;
+  // Branching evolutions (e.g. Eevee) have a short chain — treat them as base→final
+  if (pokemon.evolution_chain.length === 1) return instance.level >= 20;
   if (pokemon.evolution_chain.length === 2) return instance.level >= 20;
   if (pokemon.evolution_chain.length === 3) {
     if (instance.stage === "base") return instance.level >= 20;
