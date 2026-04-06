@@ -128,7 +128,7 @@ router.post("/trade/create", (req, res) => {
   };
   rooms.set(code, room);
 
-  res.json({ code, ...roomView(room, userId) });
+  res.json(roomView(room, userId));
 });
 
 // POST /api/trade/join
